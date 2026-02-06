@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sneha Love Quiz 🌼</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  font-family: Arial, sans-serif;
+  text-align: center;
+  color: white;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* ===== FALLING PETALS ===== */
+.petals {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.petals span {
+  position: absolute;
+  top: -50px;
+  width: 18px;
+  height: 18px;
+  background: pink;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall linear infinite;
+}
+
+.petals span:nth-child(odd) { background: #ffccd5; }
+.petals span:nth-child(even) { background: #ff8fab; }
+
+@keyframes fall {
+  from { transform: translateY(-50px) rotate(0deg); }
+  to { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* ===== QUIZ STYLING ===== */
+.quiz-box {
+  background: white;
+  color: #d00040;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 10px auto;
+  max-width: 400px;
+}
+
+/* Buttons */
+button {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #ff0033;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #cc0029;
+}
+
+/* Popups */
+#errorBox,
+#continueBox,
+#continueBoxQ2,
+#continueBoxQ3,
+#continueBoxQ4 {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: #d00040;
+  padding: 20px;
+  border-radius: 15px;
+  width: 300px;
+  text-align: center;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* ===== FLOATING LILIES ===== */
+#reveal {
+  display: none;
+  margin-top: 20px;
+  background: white;
+  color: #d00040;
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 450px;
+  margin: 20px auto;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+#garden {
+  position: relative;
+  height: 400px;
+  overflow: visible;
+}
+
+/* Lily container for floating animation */
+.lily-container {
+  position: absolute;
+  bottom: 0;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Lily stem */
+.lily {
+  position: relative;
+  width: 8px;
+  height: 180px;
+  background: linear-gradient(#2e8b57, #145a32);
+  border-radius: 10px;
+  margin: 0 auto;
+  animation: grow 1.5s ease-out, sway 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Leaves */
+.lily::before {
+  content: "";
+  position: absolute;
+  bottom: 60px;
+  left: -30px;
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(#1e8449, #145a32);
+  border-radius: 50% 50% 0 50%;
+  transform: rotate(-20deg);
+  animation: leafSway 3s ease-in-out infinite;
+}
+
+.lily::after {
+  content: "";
+  position: absolute;
+  bottom: 100px;
+  right: -30px;
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(#1e8449, #145a32);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(20deg);
+  animation: leafSway 3s ease-in-out infinite reverse;
+}
+
+/* Lily flower - teardrop/heart shaped petal */
+.flower {
+  position: absolute;
+  top: -60px;
+  left: -26px;
+  width: 60px;
+  height: 70px;
+  background: white;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,250,205,0.5);
+  animation: bloom 1.5s ease-out, flowerSway 3s ease-in-out infinite;
+  border: 2px solid #f0f0f0;
+}
+
+/* Yellow spadix (center spike) */
+.flower::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 35px;
+  background: linear-gradient(to top, #d4a017, #ffcc33, #ffd700);
+  border-radius: 3px 3px 50% 50%;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Small pink/purple base inside petal */
+.flower::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 12px;
+  background: linear-gradient(to bottom, #e8b4e8, #d8a0d8);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* Individual lily positions and delays */
+.l1 {
+  left: 15%;
+  animation-delay: 0.2s;
+}
+.l1 .lily { animation-delay: 0.2s, 0s; }
+.l1 .flower { animation-delay: 0.2s, 0s; }
+
+.l2 {
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0.4s;
+}
+.l2 .lily { animation-delay: 0.4s, 0.5s; }
+.l2 .flower { animation-delay: 0.4s, 0.5s; }
+
+.l3 {
+  left: 80%;
+  animation-delay: 0.6s;
+}
+.l3 .lily { animation-delay: 0.6s, 1s; }
+.l3 .flower { animation-delay: 0.6s, 1s; }
+
+/* Animations */
+@keyframes grow {
+  from { height: 0; }
+  to { height: 180px; }
+}
+
+@keyframes bloom {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes flowerSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Falling petals -->
+<div class="petals">
+  <span style="left:10%; animation-duration:8s;"></span>
+  <span style="left:30%; animation-duration:10s;"></span>
+  <span style="left:50%; animation-duration:7s;"></span>
+  <span style="left:70%; animation-duration:9s;"></span>
+  <span style="left:90%; animation-duration:11s;"></span>
+</div>
+
+<h1>✨ SNEHA YOU BETTER GET THESE RIGHT ✨</h1>
+
+<div id="errorBox">
+  <p id="errorMessage"></p>
+  <button onclick="closeError()">TRY AGAIN LOOOSER</button>
+</div>
+
+<div id="continueBox">
+  <p>goood gurll 💖</p>
+  <button onclick="goToQ2()">CONTINUE</button>
+</div>
+
+<div id="continueBoxQ2">
+  <p>YOU ARE DAMN RIGHT! 💥</p>
+  <button onclick="goToQ3()">CONTINUE</button>
+</div>
+
+<div id="continueBoxQ3">
+  <p>SNEHA IS OUT OF THIS WORLDD 🌌💖</p>
+  <button onclick="goToQ4()">CONTINUE</button>
+</div>
+
+<div id="continueBoxQ4">
+  <p>THATS MEI GURL 💕</p>
+  <button onclick="showLilies()">CONTINUE</button>
+</div>
+
+<div id="q1" class="quiz-box">
+  <p>1️⃣ Am I the best boyfriend EVERRRR?</p>
+  <button onclick="check(1,'A')">A) Yes</button>
+  <button onclick="check(1,'B')">B) YESSSSSS A THOUSAND TIMES YESSSSSS</button>
+  <button onclick="check(1,'C')">C) No.</button>
+  <button onclick="check(1,'D')">D) I don't know</button>
+</div>
+
+<div id="q2" class="quiz-box" style="display:none;">
+  <p>2️⃣ Who loves more??</p>
+  <button onclick="check(2,'A')">A) RHONE</button>
+  <button onclick="check(2,'B')">B) SNEHA</button>
+</div>
+
+<div id="q3" class="quiz-box" style="display:none;">
+  <p>3️⃣ Who's the moooost AMAAAAZING girlfriend?</p>
+  <button onclick="check(3,'A')">A) some random girl</button>
+  <button onclick="check(3,'B')">B) Althaf</button>
+  <button onclick="check(3,'C')">C) SNEHAPPYYYYYY</button>
+</div>
+
+<div id="q4" class="quiz-box" style="display:none;">
+  <p>4️⃣ What would you reply to "I LOVE YOU MORE"?</p>
+  <button onclick="check(4,'A')">A) I LOOOOVE YOU MOSTTTT</button>
+  <button onclick="check(4,'B')">B) i love you most</button>
+  <button onclick="check(4,'C')">C) I LOVE YOU</button>
+  <button onclick="check(4,'D')">D) FUCK YOU BITCH I HATE YOU</button>
+</div>
+
+<!-- 🌼 FLOATING LILIES REVEAL -->
+<div id="reveal">
+  <h2>🌼 LILIES FOR SNEHAPPPYY 🌼</h2>
+  <div id="garden">
+    <div class="lily-container l1">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
+    <div class="lily-container l2">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
+    <div class="lily-container l3">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
+  </div>
+  <p>GOOOD JABBB SNEHAPPPYY 💖 YOU DESERVE THESE LILIES 🌼</p>
+  <button onclick="resetQuiz()">HAVE ANOTHER GO 💕</button>
+</div>
+
+<script>
+const correctAnswers = {1:"B",2:"A",3:"C",4:"A"};
+
+function closeError(){
+  document.getElementById("errorBox").style.display="none";
+}
+
+function showError(msg){
+  document.getElementById("errorMessage").innerText = msg;
+  document.getElementById("errorBox").style.display="block";
+}
+
+function goToQ2(){ q1.style.display="none"; q2.style.display="block"; continueBox.style.display="none"; }
+function goToQ3(){ q2.style.display="none"; q3.style.display="block"; continueBoxQ2.style.display="none"; }
+function goToQ4(){ q3.style.display="none"; q4.style.display="block"; continueBoxQ3.style.display="none"; }
+
+function showLilies(){
+  continueBoxQ4.style.display="none";
+  q4.style.display="none";
+  reveal.style.display="block";
+}
+
+function resetQuiz(){
+  reveal.style.display="none";
+  q1.style.display="block";
+  q2.style.display="none";
+  q3.style.display="none";
+  q4.style.display="none";
+}
+
+function check(q, ans){
+  if(q===1 && ans==="B"){ continueBox.style.display="block"; return; }
+  if(q===2 && ans==="A"){ continueBoxQ2.style.display="block"; return; }
+  if(q===3 && ans==="C"){ continueBoxQ3.style.display="block"; return; }
+  if(q===4 && ans==="A"){ continueBoxQ4.style.display="block"; return; }
+
+  let messages = {
+    1:{
+      A:"WHERE IS THE DAMN ENTHUSIASM 😤",
+      C:"That makes mee saaaad 😢",
+      D:"you dont know huh?? well idk youuu 😏"
+    },
+    2:{ B:"WRONGGGG — RHONE loves more 😤" },
+    3:{
+      A:"Cmooon noo other girl even comes clooose 😭",
+      B:"HAHAHAHAAA succesfully ragebaiteddd 🤣"
+    },
+    4:{
+      B:"AGAIN wheres the damn enthusiasm 😤",
+      C:"might as well say YOU HATE ME 😭",
+      D:"now thats just rude 😡"
+    }
+  };
+
+  showError(messages[q][ans] || "TRY AGAIN 😭");
+}
+</script>
+
+</body>
+</html>
