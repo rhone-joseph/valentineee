@@ -27,8 +27,8 @@ body {
 .petals span {
   position: absolute;
   top: -50px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background: pink;
   border-radius: 50%;
   opacity: 0.8;
@@ -43,28 +43,7 @@ body {
   to { transform: translateY(100vh) rotate(360deg); }
 }
 
-/* Sparkly Title */
-.title-box {
-  position: relative;
-  display: inline-block;
-}
-
-.sparkle {
-  position: absolute;
-  font-size: 18px;
-  animation: twinkle 1.5s infinite alternate;
-}
-
-.s1 { top: -10px; left: -20px; }
-.s2 { top: -10px; right: -20px; }
-.s3 { bottom: -10px; left: 10px; }
-.s4 { bottom: -10px; right: 10px; }
-
-@keyframes twinkle {
-  0% { opacity: 0.3; transform: scale(0.8); }
-  100% { opacity: 1; transform: scale(1.2); }
-}
-
+/* ===== QUIZ STYLING ===== */
 .quiz-box {
   background: white;
   color: #d00040;
@@ -106,7 +85,7 @@ button {
   text-align: center;
 }
 
-/* Lily garden */
+/* ===== NEW REALISTIC LILIES ===== */
 #reveal {
   display: none;
   margin-top: 20px;
@@ -116,39 +95,96 @@ button {
   border-radius: 15px;
   max-width: 450px;
   margin: auto;
+  animation: fadeIn 1.2s ease-in-out;
 }
 
-#garden { position: relative; height: 300px; }
+#garden {
+  position: relative;
+  height: 320px;
+}
 
+/* Lily stem */
 .lily {
   position: absolute;
   bottom: 0;
-  width: 6px;
-  height: 160px;
-  background: #2e8b57;
-  animation: sway 3s ease-in-out infinite;
+  width: 8px;
+  height: 180px;
+  background: linear-gradient(#2e8b57, #145a32);
+  border-radius: 10px;
+  animation: grow 1.5s ease-out;
 }
 
+/* Leaves */
 .lily::before {
   content: "";
   position: absolute;
+  bottom: 60px;
+  left: -30px;
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(#1e8449, #145a32);
+  border-radius: 50% 50% 0 50%;
+  transform: rotate(-20deg);
+}
+
+.lily::after {
+  content: "";
+  position: absolute;
+  bottom: 100px;
+  right: -30px;
+  width: 60px;
+  height: 30px;
+  background: linear-gradient(#1e8449, #145a32);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(20deg);
+}
+
+/* Lily flower */
+.flower {
+  position: absolute;
   top: -40px;
   left: -22px;
-  width: 50px;
-  height: 50px;
-  background: radial-gradient(circle, #fff 40%, #fffacd 60%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #fff 45%, #fffacd 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255,255,255,0.7);
+  animation: bloom 1.5s ease-out;
+}
+
+/* Flower center */
+.flower::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 18px;
+  height: 18px;
+  background: gold;
   border-radius: 50%;
 }
 
-.l1 { left: 15%; }
-.l2 { left: 50%; }
-.l3 { left: 80%; }
+/* Lily positions */
+.l1 { left: 15%; animation-delay: 0.2s; }
+.l2 { left: 50%; animation-delay: 0.4s; }
+.l3 { left: 80%; animation-delay: 0.6s; }
 
-@keyframes sway {
-  0% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
-  100% { transform: rotate(-2deg); }
+/* Animations */
+@keyframes grow {
+  from { height: 0; }
+  to { height: 180px; }
 }
+
+@keyframes bloom {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 </style>
 </head>
 
@@ -219,16 +255,15 @@ button {
   <button onclick="check(4,'D')">D) FUCK YOU BITCH I HATE YOU</button>
 </div>
 
+<!-- 🌼 NEW BETTER LILY REVEAL -->
 <div id="reveal">
   <h2>🌼 LILIES FOR SNEHAPPPYY 🌼</h2>
   <div id="garden">
-    <div class="lily l1"></div>
-    <div class="lily l2"></div>
-    <div class="lily l3"></div>
+    <div class="lily l1"><div class="flower"></div></div>
+    <div class="lily l2"><div class="flower"></div></div>
+    <div class="lily l3"><div class="flower"></div></div>
   </div>
   <p>GOOOD JABBB SNEHAPPPYY 💖 YOU DESERVE THESE LILIES 🌼</p>
-
-  <!-- NEW BUTTON -->
   <button onclick="resetQuiz()">HAVE ANOTHER GO 💕</button>
 </div>
 
@@ -260,11 +295,6 @@ function resetQuiz(){
   q2.style.display="none";
   q3.style.display="none";
   q4.style.display="none";
-  errorBox.style.display="none";
-  continueBox.style.display="none";
-  continueBoxQ2.style.display="none";
-  continueBoxQ3.style.display="none";
-  continueBoxQ4.style.display="none";
 }
 
 function check(q, ans){
