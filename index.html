@@ -64,6 +64,11 @@ button {
   background: #ff0033;
   color: white;
   font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #cc0029;
 }
 
 /* Popups */
@@ -83,9 +88,11 @@ button {
   border-radius: 15px;
   width: 300px;
   text-align: center;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* ===== NEW REALISTIC LILIES ===== */
+/* ===== FLOATING LILIES ===== */
 #reveal {
   display: none;
   margin-top: 20px;
@@ -94,24 +101,33 @@ button {
   padding: 20px;
   border-radius: 15px;
   max-width: 450px;
-  margin: auto;
+  margin: 20px auto;
   animation: fadeIn 1.2s ease-in-out;
 }
 
 #garden {
   position: relative;
-  height: 320px;
+  height: 400px;
+  overflow: visible;
+}
+
+/* Lily container for floating animation */
+.lily-container {
+  position: absolute;
+  bottom: 0;
+  animation: float 4s ease-in-out infinite;
 }
 
 /* Lily stem */
 .lily {
-  position: absolute;
-  bottom: 0;
+  position: relative;
   width: 8px;
   height: 180px;
   background: linear-gradient(#2e8b57, #145a32);
   border-radius: 10px;
-  animation: grow 1.5s ease-out;
+  margin: 0 auto;
+  animation: grow 1.5s ease-out, sway 3s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
 /* Leaves */
@@ -125,6 +141,7 @@ button {
   background: linear-gradient(#1e8449, #145a32);
   border-radius: 50% 50% 0 50%;
   transform: rotate(-20deg);
+  animation: leafSway 3s ease-in-out infinite;
 }
 
 .lily::after {
@@ -137,37 +154,73 @@ button {
   background: linear-gradient(#1e8449, #145a32);
   border-radius: 50% 50% 50% 0;
   transform: rotate(20deg);
+  animation: leafSway 3s ease-in-out infinite reverse;
 }
 
-/* Lily flower */
+/* Lily flower - teardrop/heart shaped petal */
 .flower {
   position: absolute;
-  top: -40px;
-  left: -22px;
+  top: -60px;
+  left: -26px;
   width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, #fff 45%, #fffacd 70%);
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(255,255,255,0.7);
-  animation: bloom 1.5s ease-out;
+  height: 70px;
+  background: white;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,250,205,0.5);
+  animation: bloom 1.5s ease-out, flowerSway 3s ease-in-out infinite;
+  border: 2px solid #f0f0f0;
 }
 
-/* Flower center */
+/* Yellow spadix (center spike) */
 .flower::before {
   content: "";
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 18px;
-  height: 18px;
-  background: gold;
-  border-radius: 50%;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 35px;
+  background: linear-gradient(to top, #d4a017, #ffcc33, #ffd700);
+  border-radius: 3px 3px 50% 50%;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
-/* Lily positions */
-.l1 { left: 15%; animation-delay: 0.2s; }
-.l2 { left: 50%; animation-delay: 0.4s; }
-.l3 { left: 80%; animation-delay: 0.6s; }
+/* Small pink/purple base inside petal */
+.flower::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 12px;
+  background: linear-gradient(to bottom, #e8b4e8, #d8a0d8);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* Individual lily positions and delays */
+.l1 {
+  left: 15%;
+  animation-delay: 0.2s;
+}
+.l1 .lily { animation-delay: 0.2s, 0s; }
+.l1 .flower { animation-delay: 0.2s, 0s; }
+
+.l2 {
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0.4s;
+}
+.l2 .lily { animation-delay: 0.4s, 0.5s; }
+.l2 .flower { animation-delay: 0.4s, 0.5s; }
+
+.l3 {
+  left: 80%;
+  animation-delay: 0.6s;
+}
+.l3 .lily { animation-delay: 0.6s, 1s; }
+.l3 .flower { animation-delay: 0.6s, 1s; }
 
 /* Animations */
 @keyframes grow {
@@ -180,9 +233,51 @@ button {
   to { transform: scale(1); }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes sway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes flowerSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes leafSway {
+  0%, 100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
+
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 </style>
@@ -241,7 +336,7 @@ button {
 </div>
 
 <div id="q3" class="quiz-box" style="display:none;">
-  <p>3️⃣ Who’s the moooost AMAAAAZING girlfriend?</p>
+  <p>3️⃣ Who's the moooost AMAAAAZING girlfriend?</p>
   <button onclick="check(3,'A')">A) some random girl</button>
   <button onclick="check(3,'B')">B) Althaf</button>
   <button onclick="check(3,'C')">C) SNEHAPPYYYYYY</button>
@@ -255,13 +350,19 @@ button {
   <button onclick="check(4,'D')">D) FUCK YOU BITCH I HATE YOU</button>
 </div>
 
-<!-- 🌼 NEW BETTER LILY REVEAL -->
+<!-- 🌼 FLOATING LILIES REVEAL -->
 <div id="reveal">
   <h2>🌼 LILIES FOR SNEHAPPPYY 🌼</h2>
   <div id="garden">
-    <div class="lily l1"><div class="flower"></div></div>
-    <div class="lily l2"><div class="flower"></div></div>
-    <div class="lily l3"><div class="flower"></div></div>
+    <div class="lily-container l1">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
+    <div class="lily-container l2">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
+    <div class="lily-container l3">
+      <div class="lily"><div class="flower"></div></div>
+    </div>
   </div>
   <p>GOOOD JABBB SNEHAPPPYY 💖 YOU DESERVE THESE LILIES 🌼</p>
   <button onclick="resetQuiz()">HAVE ANOTHER GO 💕</button>
